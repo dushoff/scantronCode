@@ -1,5 +1,5 @@
 ## This is scantronCode
-## github_scantronCode
+## github_public
 
 current: target
 -include target.mk

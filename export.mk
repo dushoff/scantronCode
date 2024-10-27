@@ -1,4 +1,6 @@
 
+## Makefile to be used by other projects, note this one
+
 ## scantron.csv generally made in Tests/, can be exported
 Ignore += *.scoring.csv
 %.scoring.csv: %.scantron.csv scantronCode/scoring.pl
@@ -13,6 +15,9 @@ scantronCode/%: | ../../3SS/Marking/%
 .PRECIOUS: %.scanned.tsv
 scores/%.scanned.tsv: | %_scans/BIOLOGY*.dlm
 	$(pcopy)
+
+%.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv scores/%.scanned.tsv
+	$(pipeR)
 
 ## Process the file a bit (not really a merge)
 Ignore += *.responses.tsv

@@ -10,18 +10,27 @@ Ignore += *.scoring.csv
 scantronCode/%: | ../../3SS/Marking/%
 	$(pcopy)
 
+## Deprecated and can be deleted
 ## Editable copy of itemized responses
 ## Should be primarily for fixing student numbers (versions should be addressed programatically)
 .PRECIOUS: %.scanned.tsv
 scores/%.scanned.tsv: | %_scans/BIOLOGY*.dlm
 	$(pcopy)
 
-%.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv scores/%.scanned.tsv
+## Local copy of itemized responses
+## wildcard chokes on the spaces; this way we get unmatched warnings ☹
+.PRECIOUS: %.scanned.tsv
+%.scanned.tsv: %_scans
+	cat *_scans/BIOLOGY*.dlm *_scans/*/BIOLOGY*.dlm > $@ | \
+	## cat *_scans/*/BIOLOGY*.dlm | \
+	perl -ne 'print' > $@
+
+%.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv %.scanned.tsv
 	$(pipeR)
 
 ## Process the file a bit (not really a merge)
 Ignore += *.responses.tsv
-%.responses.tsv: scores/%.scanned.tsv scantronCode/rmerge.pl
+%.responses.tsv: %.scanned.tsv scantronCode/rmerge.pl
 	$(PUSH)
 
 ## Score the students (ancient, deep matching)
@@ -31,10 +40,10 @@ impmakeR += scores
 	$(pipeR)
 
 ## Scantron-office scores 
-## Select only the ones with matched macids for now
 Ignore += *.office.csv
-%.office.csv:%_scans/StudentScoresWebCT.csv
-	perl -ne 'print if /^[a-z0-9]*@/' $< > $@
+%.office.csv: %_scans
+	cat *_scans/StudentScoresWebCT.csv *_scans/*/StudentScoresWebCT.csv | \
+	perl -ne 'print if /^[a-z0-9]*@/' > $@
 
 impmakeR += scorecomp
 %.scorecomp.Rout: %.office.csv %.scores.rds scantronCode/scorecomp.R

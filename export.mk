@@ -20,6 +20,7 @@ scores/%.scanned.tsv: | %_scans/BIOLOGY*.dlm
 ## Local copy of itemized responses
 ## wildcard chokes on the spaces; this way we get unmatched warnings ☹
 .PRECIOUS: %.scanned.tsv
+Ignore += *.scanned.tsv
 %.scanned.tsv: %_scans
 	cat *_scans/BIOLOGY*.dlm *_scans/*/BIOLOGY*.dlm > $@ | \
 	## cat *_scans/*/BIOLOGY*.dlm | \

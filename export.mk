@@ -1,5 +1,4 @@
-
-## Makefile to be used by other projects, note this one
+## Makefile to be used by other projects, not this one
 
 ## scantron.csv generally made in Tests/, can be exported
 Ignore += *.scoring.csv

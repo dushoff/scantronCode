@@ -9,20 +9,12 @@ Ignore += *.scoring.csv
 scantronCode/%: | ../../3SS/Marking/%
 	$(pcopy)
 
-## Deprecated and can be deleted
-## Editable copy of itemized responses
-## Should be primarily for fixing student numbers (versions should be addressed programatically)
-.PRECIOUS: %.scanned.tsv
-scores/%.scanned.tsv: | %_scans/BIOLOGY*.dlm
-	$(pcopy)
-
 ## Local copy of itemized responses
-## wildcard chokes on the spaces; this way we get unmatched warnings ☹
+## Just cats; manual needs to be reformatted downstream
 .PRECIOUS: %.scanned.tsv
 Ignore += *.scanned.tsv
 %.scanned.tsv: %_scans
-	cat *_scans/BIOLOGY*.dlm *_scans/*/BIOLOGY*.dlm > $@ | \
-	## cat *_scans/*/BIOLOGY*.dlm | \
+	cat *_scans/*/BIOLOGY*.dlm | \
 	perl -ne 'print' > $@
 
 %.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv %.scanned.tsv

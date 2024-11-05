@@ -15,7 +15,7 @@ while (<>){
 		$letters =~ s/\s//g;
 		$letters =~ s/./$&\t/g;
 		$letters =~ s/\s*$//;
-		say "#$id\t$version\t$letters"
+		say "$id\t$version\t$letters"
 	} else {
 		say STDERR "repeat ID $id";
 	}

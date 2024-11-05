@@ -3,16 +3,21 @@ manageConflicts()
 library(dplyr)
 
 responses <- (tsvRead("responses", col_names=FALSE)
-	|> rename(idnum=X1)
+	|> mutate(sheetnum = 1:length(X1)
+	)
 )
 
 patches <- (tsvRead("patch")
-	|> mutate(idnum = paste0("#", idnum))
+	|> mutate(newID = paste0("#", newID))
 )
 
+summary(responses)
+summary(patches)
+
 new <- (left_join(responses, patches)
-	|> mutate(idnum = if_else(!is.na(newID), newID, idnum))
-	|> select(-c(Name, newID))
+	|> mutate(X1 = if_else(!is.na(newID), newID, X1))
+	|> select(-c(Name, newID, sheetnum, idnum))
+	|> rename(idnum=X1)
 )
 
 tsvSave(new, col_names=FALSE)

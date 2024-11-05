@@ -54,3 +54,21 @@ impmakeR += scorecomp
 %.scorecomp.Rout: %.office.csv %.scores.rds scantronCode/scorecomp.R
 	$(pipeR)
 
+impmakeR += macid
+%.macid.Rout: scantronCode/macid.R %.scores.rds scores/classlist.csv
+	$(pipeR)
+
+impmakeR += saMerge
+%.saMerge.Rout: scantronCode/saMerge.R %.macid.rds scores/saSheet.tsv
+	$(pipeR)
+
+impmakeR += curve
+%.curve.Rout: scantronCode/curve.R %.curvePars.rda %.saMerge.rds
+	$(pipeR)
+
+%.curvePars.Rout: %.curvePars.R
+	$(pipeR)
+
+impmakeR += versions
+%.versions.Rout: scantronCode/versions.R scores/saSheet.tsv scores/classlist.csv %.scores.rds
+	$(pipeR)

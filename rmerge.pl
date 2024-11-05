@@ -11,10 +11,6 @@ while (<>){
 	unless (defined $idlist{$id}){
 		$idlist{$id} = 0;
 		$version =~ s/[^0-5-]*(-?[0-5]).*/$1/;
-		$letters =~ tr/a-e/A-E/;
-		$letters =~ s/\s//g;
-		$letters =~ s/./$&\t/g;
-		$letters =~ s/\s*$//;
 		say "#$id\t$version\t$letters"
 	} else {
 		say STDERR "repeat ID $id";

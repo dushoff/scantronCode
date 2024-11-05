@@ -20,6 +20,10 @@ Ignore += *.scanned.tsv
 %.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv %.scanned.tsv
 	$(pipeR)
 
+impmakeR += responses
+%.responses.Rout: scantronCode/responsePatch.R %.responses.tsv scores/%.patch.tsv
+	$(pipeR)
+
 ## Process the file a bit (not really a merge)
 Ignore += *.responses.tsv
 %.responses.tsv: %.scanned.tsv scantronCode/rmerge.pl
@@ -28,7 +32,7 @@ Ignore += *.responses.tsv
 ## Score the students (ancient, deep matching)
 ## How many have weird bubble versions? How many have best ≠ bubble?
 impmakeR += scores
-%.scores.Rout: scantronCode/scores.R %.responses.tsv %.scoring.csv
+%.scores.Rout: scantronCode/scores.R %.responses.Rout.tsv %.scoring.csv
 	$(pipeR)
 
 ## Scantron-office scores 

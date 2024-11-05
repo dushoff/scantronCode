@@ -5,17 +5,24 @@ Ignore += *.scoring.csv
 %.scoring.csv: %.scantron.csv scantronCode/scoring.pl
 	$(PUSH)
 
+## Cribbing rule still needed?? 2024 Nov 05 (Tue)
 .PRECIOUS: scantronCode/%
 scantronCode/%: | ../../3SS/Marking/%
 	$(pcopy)
 
 ## Local copy of itemized responses
-## Just cats; manual needs to be reformatted downstream
-.PRECIOUS: %.scanned.tsv
-Ignore += *.scanned.tsv
-%.scanned.tsv: %_scans
-	cat *_scans/*/BIOLOGY*.dlm | \
+## Does not chain well, and I've been having trouble with wildcard stuff. Maybe best to list sources in Makefile.
+.PRECIOUS: %.autoscan.tsv
+Ignore += *.autoscan.tsv
+%.autoscan.tsv: %_scans
+	cat $*_scans/*/BIOLOGY*.dlm | \
 	perl -ne 'print' > $@
+
+%.ourscan.tsv: %_scans/manual.tsv scantronCode/scanClean.pl
+	$(PUSH)
+
+%.scanned.tsv: %.autoscan.tsv
+	$(cat)
 
 %.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv %.scanned.tsv
 	$(pipeR)

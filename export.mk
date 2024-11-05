@@ -18,9 +18,11 @@ Ignore += *.autoscan.tsv
 	cat $*_scans/*/BIOLOGY*.dlm | \
 	perl -ne 'print' > $@
 
+Ignore += *.ourscan.tsv
 %.ourscan.tsv: %_scans/manual.tsv scantronCode/scanClean.pl
 	$(PUSH)
 
+Ignore += *.scanned.tsv
 %.scanned.tsv: %.autoscan.tsv
 	$(cat)
 

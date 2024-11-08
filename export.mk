@@ -19,7 +19,7 @@ Ignore += *.autoscan.tsv
 	perl -ne 'print' > $@
 
 Ignore += *.ourscan.tsv
-%.ourscan.tsv: %_scans/manual.tsv scantronCode/scanClean.pl
+%.ourscan.tsv: scores/%.manual.tsv scantronCode/scanClean.pl
 	$(PUSH)
 
 Ignore += *.scanned.tsv

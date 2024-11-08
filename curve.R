@@ -13,4 +13,14 @@ df <- (rdsRead()
 
 summary(df)
 
-df |> select (macid, curve) |> tsvSave()
+df |> select (macid, curve) |> tsvSave() -> df
+
+summary(df)
+
+(df
+	|> filter(!is.na(macid))
+	|> transmute(Username=macid
+		, `M1 Curved Points Grade` = curve 
+		, `End-of-Line Indicator` = "#"
+	)
+) |> csvSave(ext="avenue.csv")

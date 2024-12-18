@@ -3,12 +3,13 @@ manageConflicts()
 library(dplyr)
 
 responses <- (tsvRead("responses", col_names=FALSE)
-	|> mutate(sheetnum = 1:length(X1)
-	)
+	|> mutate(sheetnum = 1:length(X1))
 )
 
 patches <- (tsvRead("patch")
-	|> mutate(newID = paste0("#", newID))
+	|> mutate(newID = paste0("#", newID)
+		, sheetnum = as.numeric(sheetnum) ## in case empty
+	)
 )
 
 summary(responses)

@@ -11,19 +11,25 @@ scantronCode/%: | ../../3SS/Marking/%
 	$(pcopy)
 
 ## Local copy of itemized responses
+## Not sure what the next line means; there's also the problem of multiple
+## scan sets and subdirectories. 
+## Right now it's looking in both places and producing a message; does it break things?
 ## Does not chain well, and I've been having trouble with wildcard stuff. Maybe best to list sources in Makefile.
 .PRECIOUS: %.autoscan.tsv
 Ignore += *.autoscan.tsv
 %.autoscan.tsv: %_scans
-	cat $*_scans/*/BIOLOGY*.dlm | \
+	cat $*_scans/BIOLOGY*.dlm $*_scans/*/BIOLOGY*.dlm | \
 	perl -ne 'print' > $@
 
 Ignore += *.ourscan.tsv
 %.ourscan.tsv: scores/%.manual.tsv scantronCode/scanClean.pl
 	$(PUSH)
 
+scores/%.manual.tsv:
+	$(touch)
+
 Ignore += *.scanned.tsv
-%.scanned.tsv: %.autoscan.tsv
+%.scanned.tsv: %.autoscan.tsv %.ourscan.tsv
 	$(cat)
 
 %.unmatched.Rout: scantronCode/unmatched.R scores/classlist.csv %.scanned.tsv

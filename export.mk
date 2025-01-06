@@ -40,7 +40,7 @@ impmakeR += responses
 	$(pipeR)
 
 scores/%.patch.tsv:
-	$(copy) scantronCode/template.patch.tsv $@
+	$(CP) scantronCode/template.patch.tsv $@
 
 ## Process the file a bit (not really a merge)
 Ignore += *.responses.tsv

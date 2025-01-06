@@ -39,6 +39,9 @@ impmakeR += responses
 %.responses.Rout: scantronCode/responsePatch.R %.responses.tsv scores/%.patch.tsv
 	$(pipeR)
 
+scores/%.patch.tsv:
+	$(copy) scantronCode/template.patch.tsv $@
+
 ## Process the file a bit (not really a merge)
 Ignore += *.responses.tsv
 %.responses.tsv: %.scanned.tsv scantronCode/rmerge.pl
